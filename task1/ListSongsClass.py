@@ -1,41 +1,63 @@
 import os, csv
-#import pandas as pd
 from SongClass import Song
 
 class ListSongs(object):
-    def __init__(self):
-        self.__path_to_csv_file = os.getcwd() + '.\\task1\\songs.csv'
+    def __init__(self, file_name='songs.csv'):
+        self.__path_to_csv_file = os.getcwd() + f'.\\task1\\{file_name}'
         self.__list_songs = self.__read_data_csv()
+        self.__field_names = 'author,title,album,release_year,duration'.split(',')
     def __read_data_csv(self):
-        with open(self.__path_to_csv_file, encoding='utf-8') as csv_file:
-            data = csv.DictReader(csv_file, delimiter=',')
-            data_tmp = []
-            for row in data:
-                song = Song(
-                    row['title'],
-                    row['author'],
-                    row['album'],
-                    row['release_year'],
-                    row['duration']
-                )
-                data_tmp.append(song)
-        return data_tmp
-    def add_song(self):
-        pass
+        '''Чтение файла с данными в список'''
+        try:
+            # попытка открыть файл для чтения, иначе исключение
+            with open(self.__path_to_csv_file, encoding='utf-8') as csv_file:
+                data = csv.DictReader(csv_file, delimiter=',')
+                data_tmp = []
+                for row in data:
+                    song = Song(data=row, is_dict=True)
+                    data_tmp.append(song)
+            return data_tmp
+        except FileNotFoundError:
+            # не нашли указанный файл
+            file_name = os.path.split(self.__path_to_csv_file)[1]
+            print(f'Файл {file_name} отсутствует:')
+            # то создаем новый и работаем с ним
+            with open(self.__path_to_csv_file, 'w') as f:
+                wr = csv.writer(f)
+                wr.writerow('author,title,album,release_year,duration'.split(','))
+            print(f'Был создан новый файл хранения {file_name}')
+    def add_song(self, song_data):
+        '''Добавление новой композиции в рабочий список'''
+        try:
+            self.__list_songs.append(Song(data=song_data, is_dict=True))
+            return True
+        except Exception:
+            return False
     def del_song(self):
+        '''Удаление композиции из списка'''
         pass
     def edit_song(self):
+        '''Изменить информацию о композиции'''
         pass
     def print_list(self):
-        print('Список композиций:')
-        for song in self.__list_songs:
-            print(song)
+        '''Вывести весь список'''
+        if not self.__list_songs:
+            print('Список композиций пуст')
+        else:
+            print('Список композиций:')
+            for song in self.__list_songs:
+                print(song)
     def find_song(self):
+        '''Найти композицию по названю/автору/длительности'''
         pass
+    def save_songs(self):
+        '''Сохранить рабочий список, перезаписав файл'''
+        with open(self.__path_to_csv_file, 'w', newline='', encoding='utf-8') as csv_file:
+            writer = csv.DictWriter(csv_file, fieldnames=self.__field_names, delimiter=',')
+            writer.writeheader()
+            writer.writerows([song.get_like_dict() for song in self.__list_songs])
     def get_help(self):
-        """
-        Метод возвращает список команд для работы с приложением
-        """
+        '''Метод возвращает список команд для работы с приложением'''
         ret_help = '''
         Доступные команды:
             add - добавить запись
@@ -48,9 +70,8 @@ class ListSongs(object):
         '''
         return ret_help
     def __str__(self):
-        return 'Ошибка вывода'
-
+        return 'Ошибка вывода > используйте print_list() для вывода списка композиций'
 
 if __name__ == "__main__":
     lst = ListSongs()
-    lst.print_list()
+    #lst.print_list()

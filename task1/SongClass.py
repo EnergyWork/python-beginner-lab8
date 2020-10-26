@@ -1,11 +1,26 @@
 class Song(object):
     '''Класс, описывающий композицию'''
-    def __init__(self, title=None, author=None, album=None, release_year=None, duration=None):
-        self.__title = title
-        self.__author = author
-        self.__album = album
-        self.__release_year = release_year
-        self.__duration = duration
+    def __init__(self, \
+        title=None, author=None, album=None, release_year=None, duration=None,\
+            data=None, is_dict=False):
+        if is_dict:
+            if type(data) is dict:
+                self.__title = data['title']
+                self.__author = data['author']
+                self.__album = data['album']
+                self.__release_year = data['release_year']
+                self.__duration = data['duration']
+            else:
+                print('Неверный формат добавляемых данных')
+        else:
+            if type(data) is not dict:
+                self.__title = title
+                self.__author = author
+                self.__album = album
+                self.__release_year = release_year
+                self.__duration = duration
+            else:
+                print('Неверный формат добавляемых данных')
     @property
     def title(self):
         return self.__title
@@ -36,6 +51,15 @@ class Song(object):
     @duration.setter
     def duration(self, value):
         self.__duration = value
+    def get_like_dict(self):
+        '''Возвращает объект Song в виде словаря'''
+        return {
+            'author' : self.author,
+            'title' : self.title,
+            'album' : self.album,
+            'release_year' : self.release_year,
+            'duration' : self.duration
+        }
     def __str__(self):
         return f'{self.__author} - {self.__title} ({self.__album}, {self.__release_year}) - {self.__duration}'
 
