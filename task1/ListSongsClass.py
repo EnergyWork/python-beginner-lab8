@@ -47,9 +47,22 @@ class ListSongs(object):
             print('Список композиций:')
             for song in self.__list_songs:
                 print(song)
+    def print_album(self, author):
+        print('Список композиций ')
     def find_song(self):
         '''Найти композицию по названю/автору/длительности'''
         pass
+    def get_albums(self, author):
+        albums = []
+        for song in list(filter(lambda x: x.author == author, self.__list_songs)):
+           albums.append(song.album)
+        return albums
+    def is_author(self, author):
+        for song in self.__list_songs:
+            if song.author == author:
+                return True
+        else:
+            return False
     def save_songs(self):
         '''Сохранить рабочий список, перезаписав файл'''
         with open(self.__path_to_csv_file, 'w', newline='', encoding='utf-8') as csv_file:

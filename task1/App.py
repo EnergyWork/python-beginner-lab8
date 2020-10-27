@@ -23,8 +23,14 @@ class Application(object):
                 pass
             elif command == 'edit':
                 pass
-            elif command == 'print':
-                self.__print()
+            elif command.__contains__('print'):
+                cmd = command.split()
+                if len(cmd) == 1:
+                    self.__print_list()
+                elif len(cmd) == 2:
+                    self.__print_album_songs(cmd[1])
+                else:
+                    print('Неверный формат команды print')
             elif command == 'find':
                 pass
             elif command == 'exit':
@@ -47,8 +53,16 @@ class Application(object):
         pass
     def __find(self):
         pass
-    def __print(self):
+    def __print_list(self):
         self.songs.print_list()
+    def __print_album_songs(self, author):
+        if self.songs.is_author(author):
+            albums = list(set(self.songs.get_albums(author))) # -> list(str)
+            print('Выберите нужный вам альбом:')
+            for alb in albums:
+                print(f' - {alb}')
+        else:
+            print('Такого авторе нет в списке ваших записей')
     @classmethod
     def get_err_msg(cls):
         print('Ошибка. Повторите попытку.', end=' ')
