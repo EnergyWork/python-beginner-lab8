@@ -24,7 +24,7 @@ class Application(object):
             elif command == 'edit':
                 pass
             elif command == 'print':
-                self.songs.print_list()
+                self.__print()
             elif command == 'find':
                 pass
             elif command == 'exit':
@@ -43,6 +43,12 @@ class Application(object):
             'duration' : self.duration_input()
         }
         return True if self.songs.add_song(d) else False
+    def __del(self):
+        pass
+    def __find(self):
+        pass
+    def __print(self):
+        self.songs.print_list()
     @classmethod
     def get_err_msg(cls):
         print('Ошибка. Повторите попытку.', end=' ')
