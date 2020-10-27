@@ -1,6 +1,5 @@
-import os, csv, re
 from ListSongsClass import ListSongs
-import datetime
+import datetime, re
 
 class Application(object):
     '''Основное приложение'''
@@ -49,18 +48,43 @@ class Application(object):
             'duration' : self.duration_input()
         }
         return True if self.songs.add_song(d) else False
+    # удаление композиции
     def __del(self):
         pass
+    # поиск записи по названию
     def __find(self):
         pass
+    # вывод списка всех запией
     def __print_list(self):
-        self.songs.print_list()
+        '''Вывод всех записей'''
+        songs_list = self.songs.get_list()
+        if type(songs_list) is list:
+            print('Список всех записей:')
+            for song in songs_list:
+                print(song)
+        else:
+            print(songs_list)
+    # вывод записей из альбома одного автора
     def __print_album_songs(self, author):
+        '''Получание всех альбомов определенного автора'''
         if self.songs.is_author(author):
             albums = list(set(self.songs.get_albums(author))) # -> list(str)
-            print('Выберите нужный вам альбом:')
-            for alb in albums:
-                print(f' - {alb}')
+            print('Выберите нужный Вам альбом:')
+            for i, alb in enumerate(albums):
+                print(f' {i} - {alb}')
+            selected = input('Введите номер или название > ')
+            try:
+                selected = int(selected)
+                try:
+                    songs_for_album = self.songs.get_songs_for_album(albums[selected])
+                    for song in songs_for_album:
+                        print(song)
+                except IndexError:
+                    print('Нет такого номера с списке')
+            except Exception:
+                songs_for_album = self.songs.get_songs_for_album(selected)
+                for song in songs_for_album:
+                    print(song)
         else:
             print('Такого авторе нет в списке ваших записей')
     @classmethod

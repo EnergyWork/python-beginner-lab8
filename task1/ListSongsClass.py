@@ -39,14 +39,12 @@ class ListSongs(object):
     def edit_song(self):
         '''Изменить информацию о композиции'''
         pass
-    def print_list(self):
+    def get_list(self):
         '''Вывести весь список'''
         if not self.__list_songs:
-            print('Список композиций пуст')
+            return 'Список композиций пуст'
         else:
-            print('Список композиций:')
-            for song in self.__list_songs:
-                print(song)
+            return self.__list_songs
     def print_album(self, author):
         print('Список композиций ')
     def find_song(self):
@@ -57,6 +55,12 @@ class ListSongs(object):
         for song in list(filter(lambda x: x.author == author, self.__list_songs)):
            albums.append(song.album)
         return albums
+    def get_songs_for_album(self, album):
+        tmp = []
+        for song in self.__list_songs:
+            if song.album == album:
+                tmp.append(song)
+        return tmp if len(tmp) > 0 else ['У этого автора нет такого альбома']
     def is_author(self, author):
         for song in self.__list_songs:
             if song.author == author:
@@ -87,4 +91,3 @@ class ListSongs(object):
 
 if __name__ == "__main__":
     lst = ListSongs()
-    #lst.print_list()
