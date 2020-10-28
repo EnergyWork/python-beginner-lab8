@@ -1,7 +1,7 @@
 from ListSongsClass import ListSongs
 import datetime, re
 
-class Application(object):
+class Application:
     '''Основное приложение'''
     # конструктор класса: инициализируем список композиция для манипуляций над ними
     def __init__(self):
@@ -19,7 +19,11 @@ class Application(object):
                 else:
                     print('При добавление произошла ошибка')
             elif command == 'del':
-                pass
+                result = self.__del()
+                if result:
+                    print('Запись успешно удалена')
+                else:
+                    print('При удалении произошла ошибка, попробуйте снова')
             elif command == 'edit':
                 pass
             elif command.__contains__('print'):
@@ -50,7 +54,22 @@ class Application(object):
         return True if self.songs.add_song(d) else False
     # удаление композиции
     def __del(self):
-        pass
+        author = input('Введите автора:')
+        list_os_songs = self.songs.get_songs_of_author(author)
+        print('Выберите какую запись удалить:')
+        if list_os_songs is None:
+            print('Такого автора нет в списке Ваших записей')
+            return False
+        else:
+            for i, song in enumerate(list_os_songs):
+                print(f'{i}. {song} ')
+            selected = input('Введите номер или название > ')
+            try:
+                selected = int(selected)
+                ret_result = self.songs.del_song(author, list_os_songs[selected].title)
+            except Exception:
+                ret_result = self.songs.del_song(author, selected)
+        return ret_result
     # поиск записи по названию
     def __find(self):
         pass

@@ -1,4 +1,4 @@
-class Song(object):
+class Song:
     '''Класс, описывающий композицию'''
     def __init__(self, \
         title=None, author=None, album=None, release_year=None, duration=None,\

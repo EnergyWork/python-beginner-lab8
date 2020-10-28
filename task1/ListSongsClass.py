@@ -1,7 +1,7 @@
 import os, csv
 from SongClass import Song
 
-class ListSongs(object):
+class ListSongs:
     def __init__(self, file_name='songs.csv'):
         self.__path_to_csv_file = os.getcwd() + f'.\\task1\\{file_name}'
         self.__list_songs = self.__read_data_csv()
@@ -33,9 +33,15 @@ class ListSongs(object):
             return True
         except Exception:
             return False
-    def del_song(self):
+    def del_song(self, author, title):
         '''Удаление композиции из списка'''
-        pass
+        for i, song in enumerate(self.__list_songs):
+            if song.author == author and song.title == title:
+                self.__list_songs.pop(i)
+                return True
+        else:
+            return False
+        return False
     def edit_song(self):
         '''Изменить информацию о композиции'''
         pass
@@ -61,6 +67,12 @@ class ListSongs(object):
             if song.album == album:
                 tmp.append(song)
         return tmp if len(tmp) > 0 else ['У этого автора нет такого альбома']
+    def get_songs_of_author(self, author):
+        tmp = []
+        for song in self.__list_songs:
+            if song.author == author:
+                tmp.append(song)
+        return tmp if len(tmp) > 0 else None
     def is_author(self, author):
         for song in self.__list_songs:
             if song.author == author:
