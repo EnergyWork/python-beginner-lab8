@@ -25,7 +25,11 @@ class Application:
                 else:
                     print('При удалении произошла ошибка, попробуйте снова')
             elif command == 'edit':
-                pass
+                result = self.__edit()
+                if result:
+                    print('Запись успешно изменена')
+                else:
+                    print('При изменении данных произошла ошибка, попробуйте снова')
             elif command.__contains__('print'):
                 cmd = command.split()
                 if len(cmd) == 1:
@@ -35,7 +39,7 @@ class Application:
                 else:
                     print('Неверный формат команды print')
             elif command == 'find':
-                pass
+                self.__find()
             elif command == 'exit':
                 self.songs.save_songs()
                 exit(0)
@@ -54,13 +58,13 @@ class Application:
         return True if self.songs.add_song(d) else False
     # удаление композиции
     def __del(self):
-        author = input('Введите автора:')
+        author = input('Удаление записи\nВведите автора:')
         list_os_songs = self.songs.get_songs_of_author(author)
-        print('Выберите какую запись удалить:')
         if list_os_songs is None:
             print('Такого автора нет в списке Ваших записей')
             return False
         else:
+            print('Выберите какую запись удалить:')     
             for i, song in enumerate(list_os_songs):
                 print(f'{i}. {song} ')
             selected = input('Введите номер или название > ')
@@ -72,7 +76,26 @@ class Application:
         return ret_result
     # поиск записи по названию
     def __find(self):
-        pass
+        search = input('Поиск: ')
+    def __edit(self):
+        author = input('Изменение записи\nВведите автора > ')
+        list_os_songs = self.songs.get_songs_of_author(author)
+        if list_os_songs is None:
+            print('Такого автора нет в списке Ваших записей')
+            return False
+        else:
+            print('Выберите какую запись изменить:')     
+            for i, song in enumerate(list_os_songs):
+                print(f'{i}. {song} ')
+            selected = input('Введите номер или название > ')
+            try:
+                selected = int(selected)
+                ret_result = self.__edit_song_data(author, list_os_songs[selected].title)
+            except Exception:
+                ret_result = self.__edit_song_data(author, selected)
+        return ret_result
+    def __edit_song_data(self, author, title):
+        return False
     # вывод списка всех запией
     def __print_list(self):
         '''Вывод всех записей'''
@@ -99,7 +122,7 @@ class Application:
                     for song in songs_for_album:
                         print(song)
                 except IndexError:
-                    print('Нет такого номера с списке')
+                    print('Нет такого номера в списке')
             except Exception:
                 songs_for_album = self.songs.get_songs_for_album(selected)
                 for song in songs_for_album:

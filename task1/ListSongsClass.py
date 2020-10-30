@@ -55,7 +55,8 @@ class ListSongs:
         print('Список композиций ')
     def find_song(self):
         '''Найти композицию по названю/автору/длительности'''
-        pass
+        tmp = []
+        return tmp if len(tmp) > 0 else None
     def get_albums(self, author):
         albums = []
         for song in list(filter(lambda x: x.author == author, self.__list_songs)):

@@ -60,6 +60,8 @@ class Song:
             'release_year' : self.release_year,
             'duration' : self.duration
         }
+    def get_str(self):
+        return f'{self.__author} - {self.__title} ({self.__album}, {self.__release_year}) - {self.__duration}'
     def __str__(self):
         return f'{self.__author} - {self.__title} ({self.__album}, {self.__release_year}) - {self.__duration}'
 
