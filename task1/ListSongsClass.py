@@ -42,9 +42,17 @@ class ListSongs:
         else:
             return False
         return False
-    def edit_song(self):
+    def edit_song(self, author, title, param, new_param_value):
         '''Изменить информацию о композиции'''
-        pass
+        for song in self.__list_songs:
+            if author == song.author and title == song.title:
+                try:   
+                    setattr(song, param, new_param_value)
+                    return True
+                except:
+                    return False
+        else:
+            return False
     def get_list(self):
         '''Вывести весь список'''
         if not self.__list_songs:
@@ -53,9 +61,16 @@ class ListSongs:
             return self.__list_songs
     def print_album(self, author):
         print('Список композиций ')
-    def find_song(self):
+    def find_song(self, search_str):
         '''Найти композицию по названю/автору/длительности'''
         tmp = []
+        for song in self.__list_songs:
+            if search_str in song.title or\
+                search_str in song.album or\
+                    search_str in song.author or\
+                        search_str in song.release_year or\
+                            search_str in song.duration:
+                            tmp.append(song)
         return tmp if len(tmp) > 0 else None
     def get_albums(self, author):
         albums = []
@@ -99,6 +114,8 @@ class ListSongs:
             exit - выход
         '''
         return ret_help
+    def get_fieldnames(self):
+        return self.__field_names
     def __str__(self):
         return 'Ошибка вывода > используйте print_list() для вывода списка композиций'
 

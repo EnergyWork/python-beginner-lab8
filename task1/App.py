@@ -77,6 +77,10 @@ class Application:
     # поиск записи по названию
     def __find(self):
         search = input('Поиск: ')
+        songs_search_list = self.songs.find_song(search)
+        for i, song in enumerate(songs_search_list):
+            print(f'{i}. {song}')
+    # выбор изменяемого параматре одного
     def __edit(self):
         author = input('Изменение записи\nВведите автора > ')
         list_os_songs = self.songs.get_songs_of_author(author)
@@ -94,8 +98,31 @@ class Application:
             except Exception:
                 ret_result = self.__edit_song_data(author, selected)
         return ret_result
+    # изменение параметра
     def __edit_song_data(self, author, title):
-        return False
+        fieldnames = self.songs.get_fieldnames()
+        print('Изменяемые параметры:')
+        for i, s in enumerate(fieldnames):
+            print(f'{i} - {s}')
+        stt = input('Выберите параметр который надо изменить > ')
+        try:
+            stt = int(stt)
+            if len(fieldnames) < stt < 0:
+                return False
+            print(f'Новое значения для {fieldnames[stt]}')
+            new_value = self.str_input(fieldnames[stt])
+            stt = fieldnames[stt]
+        except:
+            if stt not in fieldnames:
+                return False
+            new_value = input(f'Новое значения для {stt}')
+
+        if not (new_value and not new_value.isspace()):
+            print('Была введена пустая строка')
+            return False
+        else:
+            ret_value = self.songs.edit_song(author, title, stt, new_value)
+        return ret_value
     # вывод списка всех запией
     def __print_list(self):
         '''Вывод всех записей'''
